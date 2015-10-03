@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<meta name="csrf-token" content="{{ csrf_token() }}">
+{% endblock%}
+
+{% block content %}
+
+{{ super() }}
+<br>
+<div class='container-fluid'>
+	<div id='posts' class='row'></div>
+</div>
+<div class='container-fluid'>
+	<div class="col-md-offset-4 col-md-4">
+		<ul id='pagination' class='pagination'></ul>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+{{ moment.include_moment() }}
+
+<script src="{{url_for('.static', filename='js/read.js')}}"></script> 
+
+{% endblock %}

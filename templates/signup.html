@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+<style>
+input{text-align:center}
+.flashMessage{text-align:center}
+soab
+</style>
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="container-fluid">
+	<div class="row">
+		<form method="post" enctype="multipart/form-data">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.email(class_="form-control", placeholder="Email") }} 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.username(class_="form-control", placeholder="Username") }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.password(class_="form-control", placeholder="Password") }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.confirm(class_="form-control", placeholder="Retype Password") }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.submit(class_="form-control btn btn-default") }}
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+{{super()}}
+
+{% endblock %}

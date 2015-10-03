@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+<style>
+input{text-align:center}
+.flashMessage{text-align:center}
+p>a{text-decoration: underline; color:#333;}
+p>a:hover{text-decoration: none; color:#333;}
+</style>
+{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="container-fluid">
+	<div class="row">
+		<form method="post" enctype="multipart/form-data">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.email(class_="form-control", placeholder="Email") }} 
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.password(class_="form-control", placeholder="Password") }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.remember_me }} 
+						<span>Keep me signed in</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						{{ form.submit(class_="form-control btn btn-default") }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-4 col-md-4">
+					<div class="form-group">
+						<p>Not a user? Click here to <a href="{{ url_for('.signup') }}">sign up</a></p>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

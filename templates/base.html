@@ -1,0 +1,69 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}Blabber Blog{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" type="image/x-icon">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-default" role='navigation'>
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ url_for('.read') }}">Blabber</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li id='read'><a href="{{ url_for('.read') }}">Read<span class="sr-only">(current)</span></a></li>
+        <li id='write'>
+            <a href="{{ url_for('.write') }}">Write</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if current_user.is_authenticated %}
+        <li id='profile'><a href="{{ url_for('.profile') }}">Profile</a></li>
+        <li id='logout'><a href="{{ url_for('.logout') }}">Logout</a></li>
+        {% else %}
+        <li id='login'><a href="{{ url_for('.login') }}">Login</a></li>
+        <li id='signup'><a href="{{ url_for('.signup') }}">Sign Up</a></li>
+        {% endif %}          
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% for message in get_flashed_messages(with_categories=true) %}
+    <div class="flashMessage col-md-offset-4 col-md-4 alert alert-{{ message[0] }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message[1] }}
+    </div>
+    <div class="clearfix"></div>
+{% endfor %}
+<!-- CONTENT OF CHILD PAGES BELOW  -->
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+  <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+<script>
+  $(document).ready(function () {
+  $("#{{request.endpoint}}").addClass("active"); })
+</script>
+
+{% endblock %}
+
+

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
+			<ul class="list-group">
+			  <li class="list-group-item disabled">User Information</li>
+			  <li class="list-group-item">
+			  	Username: <span id='username'></span>
+			  </li>
+			  <li class="list-group-item">
+			  	Email: <span id='email'></span>
+			  </li>
+			  <li class="list-group-item">
+			  	Registered On: <span id='registeredOn'></span>
+			  </li>
+			</ul>
+		</div>
+		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
+			<ul id='userPosts' class="list-group">
+			  <li class="list-group-item disabled">Your Posts</li>
+			</ul>
+		</div>
+		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
+			<ul id='likedPosts' class="list-group">
+			  <li class="list-group-item disabled">Liked Posts</li>
+			</ul>
+		</div>					
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+
+<script src="{{ url_for('.static', filename='js/profile.js') }}"></script>
+
+{% endblock %}
