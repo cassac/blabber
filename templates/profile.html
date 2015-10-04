@@ -1,20 +1,26 @@
 {% extends "base.html" %}
 {% block head %}
 {{ super() }}
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 {% endblock %}
 {% block content %}
 
 <div class="container">
-	<div class="row">
+	<div class="row" id='profileContainer'>
 		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
 			<ul class="list-group">
-			  <li class="list-group-item disabled">User Information</li>
+			  <li class="list-group-item list-group-item-success">User Information
+				  	<span id='editUserInfo' style="cursor:pointer" class='editInfoBtn editInfo pull-right'>Edit</span>
+				  	<span id='updateUserInfo' style="display:none; cursor:pointer" class='editInfoBtn editInfo pull-right' >Update</span>
+
+			  </li>
 			  <li class="list-group-item">
 			  	Username: <span id='username'></span>
+			  	<input id='editUsername' class='editInfo' style='display:none' type='text' name='username'>
 			  </li>
 			  <li class="list-group-item">
 			  	Email: <span id='email'></span>
+			  	<input id='editEmail' class='editInfo' style='display:none' type='text' name='email'>			  	
 			  </li>
 			  <li class="list-group-item">
 			  	Registered On: <span id='registeredOn'></span>
@@ -23,12 +29,12 @@
 		</div>
 		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
 			<ul id='userPosts' class="list-group">
-			  <li class="list-group-item disabled">Your Posts</li>
+			  <li class="list-group-item list-group-item-info">Your Posts</li>
 			</ul>
 		</div>
 		<div class='col-sm-12 col-xs-12 col-md-4 col-lg-4'>
 			<ul id='likedPosts' class="list-group">
-			  <li class="list-group-item disabled">Liked Posts</li>
+			  <li class="list-group-item list-group-item-warning">Liked Posts</li>
 			</ul>
 		</div>					
 	</div>

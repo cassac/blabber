@@ -1,4 +1,5 @@
-from flask import Flask, flash, render_template, jsonify, request, redirect, url_for, get_flashed_messages, abort
+from flask import (Flask, flash, render_template, jsonify, request,
+	redirect, url_for, get_flashed_messages, abort)
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
 from flask.ext.login import (LoginManager, current_user, login_user, 
@@ -12,6 +13,7 @@ import json
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = '.login'
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -87,6 +89,14 @@ def read():
 	get_flashed_messages()
 	return render_template('read.html')
 
+@app.route('/read/<int:post_id>')
+def read_post(post_id):
+	post = Post.query.filter_by(id=post_id).first()
+	if post==None:
+		flash("Post doesn't exist", 'danger')
+		return redirect( url_for('.read') )
+	return render_template('readpost.html', post_id=post.id)
+
 @app.route('/write/', methods=['GET', 'POST'])
 @login_required
 def write():
@@ -95,6 +105,10 @@ def write():
 @app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def edit(post_id):
+	post = Post.query.filter_by(id=post_id).first()
+	if post.author_id != current_user.id:
+		flash('Can only edit your posts', 'warning')
+		return redirect( url_for('.read') )
 	return render_template('edit.html', post_id=post_id)		
 
 @app.route('/profile/')
@@ -115,6 +129,11 @@ singlepost_parser.add_argument('content')
 
 likepost_parser = reqparse.RequestParser()
 likepost_parser.add_argument('post_id')
+
+userprofile_parser = reqparse.RequestParser()
+userprofile_parser.add_argument('oldemail')
+userprofile_parser.add_argument('newname')
+userprofile_parser.add_argument('newemail')
 
 class AllPosts(Resource):
 	def get(self):
@@ -173,8 +192,10 @@ class SinglePost(Resource):
     		return "Post doesn't exist", 404
         post = [{
         	'post_id': result.id,
+        	'author': result.author.username,
         	'title': result.title,
-        	'content': result.content
+        	'content': result.content,
+        	'created': result.created
         }]
         return jsonify(post=post)
 
@@ -196,7 +217,7 @@ class SinglePost(Resource):
 
 class LikePost(Resource):
 	def post(self):
-
+		
 		args = likepost_parser.parse_args()
 		post_id = int(args['post_id'])
 
@@ -223,6 +244,8 @@ class LikePost(Resource):
 			return {'like_status': 1, 
 					'post_id': post.id,
 					'message': 'Post liked'}
+	def put(self):
+		return 'This is the time'
 
 class UserProfile(Resource):
 	def get(self):
@@ -242,6 +265,20 @@ class UserProfile(Resource):
 		return jsonify(user_info=user_info,
 					   liked_posts=liked_posts,
 					   user_posts=user_posts)
+
+	def put(self):
+		args = userprofile_parser.parse_args()
+		oldemail = args['oldemail']
+		newname = args['newname']
+		newemail = args['newemail']
+
+		user = User.query.filter_by(email=oldemail).first()
+		if user == None:
+			return "Can't find user", 404
+		user.email = newemail
+		user.username = newname
+		db.session.commit()
+		return 'from the put request'
 
 api.add_resource(AllPosts, '/posts')
 api.add_resource(SinglePost, '/posts/<int:post_id>')

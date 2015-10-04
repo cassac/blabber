@@ -11,7 +11,7 @@ class Post(db.Model):
     content = db.Column(db.Text)
     created = db.Column(db.Integer, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # tags = 
+    # tags = db.Column(db.String(80))
 
     # def __init__(self, slug, title, content, author_id):
     #     self.slug = slug
@@ -59,10 +59,6 @@ class User(UserMixin, db.Model):
         secondary=user_liked_posts,
         backref=db.backref('user', lazy='dynamic'),
         lazy='dynamic')
-
-    # def __init__(self, username, email):
-    #     self.username = username
-    #     self.email = email
 
     @property
     def password(self):
