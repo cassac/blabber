@@ -1,5 +1,5 @@
 # blabber
-Blog App
+Blog App - Python/Flask, Bootstrap, jQuery
 
 User registration and authentication. Post, edit, delete and favorite posts.
 
