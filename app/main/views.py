@@ -1,37 +1,17 @@
-from flask import (Flask, flash, render_template, jsonify, request,
+from flask import (flash, render_template, jsonify, request,
 	redirect, url_for, get_flashed_messages, abort)
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.moment import Moment
-from flask.ext.login import (LoginManager, current_user, login_user, 
+from flask.ext.login import (current_user, login_user, 
 	logout_user, login_required)
-from flask_restful import Api, fields, marshal_with, reqparse, Resource
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_restful import fields, marshal_with, reqparse, Resource
 from sqlalchemy import desc
-from flask_wtf.csrf import CsrfProtect
 import json
-
-login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.login_view = '.login'
-login_manager.login_message_category = "info"
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'the secret key, shhhh!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
-api = Api(app)
-bootstrap = Bootstrap(app)
-moment = Moment(app)
-csrf = CsrfProtect(app)
-login_manager.init_app(app)
-
-from models import *
 from forms import LoginForm, SignUpForm
-@app.route('/login/', methods=['GET', 'POST'])
+
+from . import main
+from ..models import *
+from .. import db
+
+@main.route('/login/', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -45,14 +25,14 @@ def login():
 	get_flashed_messages()		
 	return render_template('login.html', form=form)
 
-@app.route('/logout/')
+@main.route('/logout/')
 @login_required
 def logout():
 	logout_user()
 	flash('You have been logged out.')
 	return redirect(url_for('.read'))
 
-@app.route('/signup/', methods=['GET', 'POST'])
+@main.route('/signup/', methods=['GET', 'POST'])
 def signup():
 	form = SignUpForm()
 	if form.validate_on_submit():
@@ -82,15 +62,15 @@ def signup():
 	get_flashed_messages()	
 	return render_template('signup.html', form=form)
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/read/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
+@main.route('/read/', methods=['GET', 'POST'])
 def read():
 	# Not sure why, but flashed messages won't
 	# display in template unless invoke below method
 	get_flashed_messages()
 	return render_template('read.html')
 
-@app.route('/read/<int:post_id>')
+@main.route('/read/<int:post_id>')
 def read_post(post_id):
 	post = Post.query.filter_by(id=post_id).first()
 	if post==None:
@@ -98,12 +78,12 @@ def read_post(post_id):
 		return redirect( url_for('.read') )
 	return render_template('readpost.html', post_id=post.id)
 
-@app.route('/write/', methods=['GET', 'POST'])
+@main.route('/write/', methods=['GET', 'POST'])
 @login_required
 def write():
 	return render_template('write.html')
 
-@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+@main.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
 def edit(post_id):
 	post = Post.query.filter_by(id=post_id).first()
@@ -112,7 +92,7 @@ def edit(post_id):
 		return redirect( url_for('.read') )
 	return render_template('edit.html', post_id=post_id)		
 
-@app.route('/profile/')
+@main.route('/profile/')
 @login_required
 def profile():
 	return render_template('profile.html')
@@ -280,11 +260,3 @@ class UserProfile(Resource):
 		user.username = newname
 		db.session.commit()
 		return 'from the put request'
-
-api.add_resource(AllPosts, '/posts')
-api.add_resource(SinglePost, '/posts/<int:post_id>')
-api.add_resource(LikePost, '/like')
-api.add_resource(UserProfile, '/user')
-
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')

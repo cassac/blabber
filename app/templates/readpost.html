@@ -25,7 +25,7 @@
 {% block scripts %}
 {{super()}}
 
-<script src="{{ url_for('.static', filename='js/read.js') }}"></script>
+<script src="{{ url_for('static', filename='js/read.js') }}"></script>
 <script>
     loadPost({{ post_id|tojson }});
 </script>

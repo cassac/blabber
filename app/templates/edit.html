@@ -2,7 +2,7 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css"/>
-<link rel="stylesheet" href="{{ url_for('.static', filename='css/write.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/write.css') }}"/>
 {% endblock %}
 {% block content %}
 
@@ -45,7 +45,7 @@
 {{super()}}
 
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
-<script src="{{ url_for('.static', filename='js/edit.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit.js') }}"></script>
 <script>
     loadPost({{ post_id|tojson }});
 </script>
