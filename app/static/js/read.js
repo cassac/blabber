@@ -1,5 +1,5 @@
 var appendPost = function(post) {
-  $post_div = '<div id="'+ post.id +'" class="parentDiv col-sm-12 col-xs-12 col-md-4 col-lg-4">' +
+  $post_div = '<div id="'+ post.id +'" class="parentDiv col-md-4 col-sm-6 col-xs-12">' +
     '<div class="well">' +
         '<div class="media">' +
           '<a class="pull-left" href="#">' +
@@ -97,8 +97,8 @@ $(document).on('click', '.likeBtn', function(event){
       flashMessage('success', data.message);
     }, // end success
     error: function(error) {
-      console.log(error);
-       flashMessage('danger', 'Error: post not liked');
+      // console.log(error);
+       flashMessage('warning', 'Must be logged in to like posts.');
     }// end error
   }); // end ajax  
 }); // end on 
