@@ -20,8 +20,8 @@ db.create_all()
 3) Create fictitious users and posts
 ```
 python manage.py shell
-User.generate_fake()
-Post.generate_fake()
+User().generate_fake()
+Post().generate_fake()
 ```
 
 4) Run app
