@@ -29,7 +29,11 @@ def login():
 @login_required
 def logout():
 	logout_user()
+<<<<<<< HEAD
 	flash('You have been logged out.')
+=======
+	flash('You have been logged out.', 'success')
+>>>>>>> 251c0748dade9601b244f4b91abb532490764d81
 	return redirect(url_for('.read'))
 
 @main.route('/signup/', methods=['GET', 'POST'])
